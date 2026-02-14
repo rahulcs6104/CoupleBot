@@ -2,14 +2,15 @@
 #define MQTT_HANDLER_H
 
 #include <PubSubClient.h>
+#include <Arduino.h>
 
-extern PubSubClient mqtt;
-
-void sendMessage(const char* type) {
+inline void sendMessage(PubSubClient &mqtt, const String &topic, const char* type) {
   String msg = "{\"type\":\"";
   msg += type;
-  msg += "\"}";
-  mqtt.publish(TOPIC_SEND, msg.c_str());
+  msg += "\",\"timestamp\":";
+  msg += String(millis());
+  msg += "}";
+  mqtt.publish(topic.c_str(), msg.c_str());
 }
 
 #endif
